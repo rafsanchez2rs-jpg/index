@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PostaJá — Postou. Vendeu. Repetiu.</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #070810;
+  --surface: #0c0e1a;
+  --card: #111422;
+  --card2: #161a2e;
+  --border: rgba(255,255,255,0.06);
+  --border2: rgba(255,255,255,0.11);
+  --border3: rgba(255,255,255,0.18);
+  --accent: #4f7cff;
+  --accent-dim: rgba(79,124,255,0.18);
+  --accent-glow: rgba(79,124,255,0.3);
+  --green: #22c55e;
+  --green-dim: rgba(34,197,94,0.15);
+  --amber: #f59e0b;
+  --amber-dim: rgba(245,158,11,0.15);
+  --red: #ef4444;
+  --red-dim: rgba(239,68,68,0.12);
+  --cyan: #06b6d4;
+  --cyan-dim: rgba(6,182,212,0.15);
+  --pink: #ec4899;
+  --text: #e8eaf6;
+  --text2: #8b90b0;
+  --text3: #555b7a;
+  --font-h: 'Syne', sans-serif;
+  --font-b: 'DM Sans', sans-serif;
+  --r: 10px;
+  --r2: 14px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--font-b);height:100vh;display:flex;overflow:hidden;font-size:14px;}
+
+/* ===== SIDEBAR ===== */
+.sb{width:220px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+.sb-logo{padding:18px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.sb-logo-icon{width:36px;height:36px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;box-shadow:0 0 20px var(--accent-glow);}
+.sb-logo-text{font-family:var(--font-h);font-weight:800;font-size:17px;letter-spacing:-0.5px;}
+.sb-logo-text em{font-style:normal;color:var(--accent);}
+.sb-logo-slogan{font-size:9px;color:var(--text3);letter-spacing:0.5px;margin-top:2px;}
+.sb-nav{flex:1;padding:12px 10px;overflow-y:auto;display:flex;flex-direction:column;gap:2px;}
+.sb-label{font-size:10px;font-weight:600;letter-spacing:1.2px;color:var(--text3);text-transform:uppercase;padding:10px 8px 4px;}
+.nav-btn{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;cursor:pointer;border:none;background:transparent;color:var(--text2);font-family:var(--font-b);font-size:13px;font-weight:500;width:100%;text-align:left;transition:all .15s;position:relative;}
+.nav-btn:hover{background:rgba(255,255,255,0.05);color:var(--text);}
+.nav-btn.active{background:var(--accent-dim);color:var(--text);border:1px solid rgba(79,124,255,0.25);}
+.nav-btn .ico{font-size:16px;width:20px;text-align:center;}
+.nav-btn .badge{margin-left:auto;font-size:10px;font-weight:700;padding:1px 6px;border-radius:20px;background:var(--red);color:#fff;}
+.nav-btn .badge.g{background:var(--green);}
+.sb-footer{padding:12px 10px;border-top:1px solid var(--border);}
+.user-pill{display:flex;align-items:center;gap:10px;padding:10px;background:var(--card);border-radius:var(--r);border:1px solid var(--border);}
+.user-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;font-family:var(--font-h);flex-shrink:0;}
+.user-name{font-size:12.5px;font-weight:600;}
+.user-plan{font-size:10.5px;color:var(--amber);font-weight:600;}
+
+/* ===== MAIN ===== */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;}
+.topbar{height:54px;flex-shrink:0;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 22px;gap:14px;}
+.topbar-title{font-family:var(--font-h);font-weight:700;font-size:16px;}
+.topbar-sub{font-size:12px;color:var(--text3);margin-left:4px;}
+.tbar-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+.api-status{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--text2);}
+.api-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* ===== BUTTONS ===== */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;border:none;font-family:var(--font-b);transition:all .15s;}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 0 16px var(--accent-glow);}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 20px var(--accent-glow);}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border2);}
+.btn-ghost:hover{background:rgba(255,255,255,0.05);color:var(--text);border-color:var(--border3);}
+.btn-green{background:var(--green);color:#0a1a0f;}
+.btn-amber{background:var(--amber);color:#1a0f00;}
+.btn-red{background:var(--red);color:#fff;}
+.btn-sm{padding:6px 12px;font-size:11.5px;border-radius:7px;}
+.btn-xs{padding:4px 10px;font-size:11px;border-radius:6px;}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none!important;}
+
+/* ===== CONTENT ===== */
+.content{flex:1;overflow-y:auto;padding:20px 22px;display:flex;flex-direction:column;gap:18px;}
+.content::-webkit-scrollbar{width:4px;}
+.content::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px;}
+
+/* ===== VIEWS ===== */
+.view{display:none;}
+.view.active{display:contents;}
+
+/* ===== CARDS ===== */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:18px;}
+.card-title{font-family:var(--font-h);font-weight:700;font-size:14px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;}
+.card-title span{font-family:var(--font-b);font-size:11px;font-weight:500;color:var(--text2);}
+
+/* ===== METRICS ===== */
+.metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.metric{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:16px;position:relative;overflow:hidden;}
+.metric::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:var(--r2) var(--r2) 0 0;}
+.m-blue::before{background:linear-gradient(90deg,var(--accent),transparent);}
+.m-green::before{background:linear-gradient(90deg,var(--green),transparent);}
+.m-amber::before{background:linear-gradient(90deg,var(--amber),transparent);}
+.m-cyan::before{background:linear-gradient(90deg,var(--cyan),transparent);}
+.metric-ico{position:absolute;top:14px;right:14px;font-size:20px;opacity:.15;}
+.metric-label{font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.9px;color:var(--text3);}
+.metric-val{font-family:var(--font-h);font-size:26px;font-weight:800;margin:7px 0 5px;letter-spacing:-0.5px;}
+.metric-delta{font-size:11.5px;}
+.up{color:var(--green);}
+.down{color:var(--red);}
+.sparks{display:flex;align-items:flex-end;gap:2px;height:28px;margin-top:8px;}
+.spark{flex:1;border-radius:2px 2px 0 0;min-width:5px;}
+
+/* ===== GRID ===== */
+.grid-2{display:grid;grid-template-columns:1.5fr 1fr;gap:14px;}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+
+/* ===== GENERATOR ===== */
+.gen-tabs{display:flex;gap:5px;margin-bottom:13px;flex-wrap:wrap;}
+.gen-tab{font-size:11.5px;font-weight:600;padding:5px 12px;border-radius:6px;cursor:pointer;border:1px solid var(--border);color:var(--text2);transition:all .15s;background:transparent;}
+.gen-tab.active{background:var(--accent-dim);border-color:rgba(79,124,255,.35);color:var(--text);}
+.platforms{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0;}
+.plat-tag{font-size:11.5px;font-weight:600;padding:5px 11px;border-radius:6px;cursor:pointer;border:1px solid var(--border);color:var(--text2);transition:all .15s;user-select:none;}
+.plat-tag.on-ig{color:#e1306c;background:rgba(225,48,108,.1);border-color:rgba(225,48,108,.3);}
+.plat-tag.on-wpp{color:#25d366;background:rgba(37,211,102,.1);border-color:rgba(37,211,102,.3);}
+.plat-tag.on-tg{color:#229ed9;background:rgba(34,158,217,.1);border-color:rgba(34,158,217,.3);}
+.plat-tag.on-am{color:#ff9900;background:rgba(255,153,0,.1);border-color:rgba(255,153,0,.3);}
+.plat-tag.on-sh{color:#ee4d2d;background:rgba(238,77,45,.1);border-color:rgba(238,77,45,.3);}
+.plat-tag.on-ml{color:#ffe600;background:rgba(255,230,0,.1);border-color:rgba(255,230,0,.3);}
+textarea.inp,input.inp,select.inp{width:100%;background:var(--card2);border:1px solid var(--border2);border-radius:var(--r);color:var(--text);font-family:var(--font-b);font-size:13px;padding:11px 13px;outline:none;transition:border-color .15s;resize:none;}
+textarea.inp:focus,input.inp:focus{border-color:rgba(79,124,255,.45);}
+select.inp{cursor:pointer;}
+.preview-box{background:var(--card2);border:1px solid var(--border);border-radius:var(--r);padding:14px;min-height:100px;margin-top:12px;position:relative;}
+.preview-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--cyan);margin-bottom:8px;}
+.preview-text{font-size:13px;line-height:1.75;color:var(--text2);white-space:pre-wrap;word-break:break-word;}
+.preview-text.loaded{color:var(--text);}
+.copy-abs{position:absolute;top:10px;right:10px;}
+
+/* ===== LOADING ===== */
+.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.15);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.typing-dots span{animation:blink 1.2s infinite;display:inline-block;}
+.typing-dots span:nth-child(2){animation-delay:.2s;}
+.typing-dots span:nth-child(3){animation-delay:.4s;}
+@keyframes blink{0%,80%,100%{opacity:0}40%{opacity:1}}
+
+/* ===== GROUP ITEMS ===== */
+.group-item{display:flex;align-items:center;gap:11px;padding:10px 11px;background:var(--card2);border:1px solid var(--border);border-radius:var(--r);margin-bottom:7px;cursor:pointer;transition:border-color .15s;}
+.group-item:hover{border-color:var(--border2);}
+.g-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.g-wpp{background:rgba(37,211,102,.12);}
+.g-tg{background:rgba(34,158,217,.12);}
+.g-name{font-size:13px;font-weight:600;}
+.g-sub{font-size:11px;color:var(--text3);margin-top:1px;}
+.g-right{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:3px;}
+.badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;}
+.badge-g{background:var(--green-dim);color:var(--green);}
+.badge-r{background:var(--red-dim);color:var(--red);}
+.badge-y{background:var(--amber-dim);color:var(--amber);}
+.badge-b{background:var(--accent-dim);color:var(--accent);}
+.badge-c{background:var(--cyan-dim);color:var(--cyan);}
+.g-count{font-size:10.5px;color:var(--text3);}
+
+/* ===== SCHEDULE ===== */
+.sched-item{display:flex;align-items:center;gap:12px;padding:11px 13px;background:var(--card2);border:1px solid var(--border);border-radius:var(--r);margin-bottom:7px;}
+.sched-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.sched-time{font-size:12px;font-weight:700;color:var(--accent);min-width:44px;font-family:var(--font-h);}
+.sched-info{flex:1;}
+.sched-name{font-size:13px;font-weight:600;}
+.sched-plat{font-size:11px;color:var(--text3);margin-top:2px;}
+.sched-actions{display:flex;gap:6px;}
+
+/* ===== AFFILIATE ===== */
+.aff-plats{display:flex;gap:7px;margin-bottom:13px;}
+.aff-btn{display:flex;align-items:center;gap:6px;padding:7px 13px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border2);background:transparent;color:var(--text2);transition:all .15s;}
+.aff-btn.active-am{background:rgba(255,153,0,.12);border-color:rgba(255,153,0,.35);color:#ff9900;}
+.aff-btn.active-sh{background:rgba(238,77,45,.12);border-color:rgba(238,77,45,.35);color:#ee4d2d;}
+.aff-btn.active-mg{background:rgba(0,100,255,.12);border-color:rgba(0,100,255,.35);color:#6699ff;}
+.aff-btn.active-ml{background:rgba(255,230,0,.12);border-color:rgba(255,230,0,.35);color:#ffe600;}
+.link-result{display:flex;align-items:center;gap:10px;padding:11px 13px;background:var(--card2);border:1px solid rgba(79,124,255,.25);border-radius:var(--r);margin-top:10px;font-size:12.5px;color:var(--accent);word-break:break-all;}
+.link-history-item{display:flex;align-items:center;gap:10px;padding:8px 11px;background:var(--card2);border:1px solid var(--border);border-radius:8px;margin-bottom:6px;font-size:12px;}
+.link-url{flex:1;color:var(--accent);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+/* ===== INSIGHTS ===== */
+.insight{display:flex;align-items:flex-start;gap:11px;padding:10px 12px;background:var(--card2);border:1px solid var(--border);border-radius:var(--r);margin-bottom:7px;}
+.insight-ico{font-size:18px;flex-shrink:0;}
+.insight-title{font-size:12.5px;font-weight:600;margin-bottom:2px;}
+.insight-body{font-size:11.5px;color:var(--text2);line-height:1.5;}
+
+/* ===== CONVERSION BARS ===== */
+.conv-row{display:flex;align-items:center;gap:10px;margin-bottom:9px;}
+.conv-label{font-size:12px;color:var(--text2);min-width:80px;}
+.conv-bar-wrap{flex:1;height:6px;background:var(--card2);border-radius:10px;overflow:hidden;}
+.conv-fill{height:100%;border-radius:10px;transition:width .5s;}
+.conv-val{font-size:11.5px;font-weight:700;min-width:32px;text-align:right;}
+
+/* ===== SETTINGS ===== */
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--border);}
+.setting-row:last-child{border-bottom:none;}
+.setting-label{font-size:13px;font-weight:600;}
+.setting-desc{font-size:11.5px;color:var(--text3);margin-top:2px;}
+.toggle{position:relative;width:36px;height:20px;}
+.toggle input{opacity:0;width:0;height:0;}
+.toggle-slider{position:absolute;inset:0;background:var(--card2);border:1px solid var(--border2);border-radius:20px;cursor:pointer;transition:.2s;}
+.toggle-slider::before{content:'';position:absolute;width:14px;height:14px;background:var(--text3);border-radius:50%;top:2px;left:2px;transition:.2s;}
+.toggle input:checked+.toggle-slider{background:var(--accent);border-color:var(--accent);}
+.toggle input:checked+.toggle-slider::before{transform:translateX(16px);background:#fff;}
+.api-key-row{display:flex;gap:8px;margin-top:8px;}
+
+/* ===== IG PREVIEW ===== */
+.ig-card{background:#1a1a2e;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:13px;margin-top:12px;max-width:320px;}
+.ig-head{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.ig-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);}
+.ig-user{font-size:12px;font-weight:700;}
+.ig-img{width:100%;height:130px;border-radius:8px;background:linear-gradient(135deg,#0d1b4b,#1a2a6b);display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:9px;}
+.ig-cap{font-size:11.5px;color:var(--text2);line-height:1.6;}
+
+/* ===== ALERT ===== */
+.alert{display:flex;align-items:center;gap:12px;padding:12px 15px;border-radius:var(--r);font-size:13px;}
+.alert-warn{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);}
+.alert-info{background:rgba(79,124,255,.1);border:1px solid rgba(79,124,255,.25);}
+.alert-success{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);}
+.alert-err{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);}
+.alert-ico{font-size:18px;}
+.alert-title{font-weight:700;}
+.alert-sub{font-size:11.5px;color:var(--text2);margin-top:1px;}
+
+/* ===== LANDING VIEW ===== */
+.landing{display:none;flex-direction:column;min-height:100vh;background:var(--bg);}
+.landing.show{display:flex;}
+.lnd-nav{display:flex;align-items:center;justify-content:space-between;padding:18px 48px;border-bottom:1px solid var(--border);}
+.lnd-logo{font-family:var(--font-h);font-weight:800;font-size:20px;}
+.lnd-logo em{font-style:normal;color:var(--accent);}
+.lnd-hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 24px;}
+.lnd-tag{display:inline-flex;align-items:center;gap:7px;background:var(--accent-dim);border:1px solid rgba(79,124,255,.3);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:600;color:var(--accent);margin-bottom:24px;}
+.lnd-h1{font-family:var(--font-h);font-size:54px;font-weight:800;line-height:1.1;letter-spacing:-1.5px;margin-bottom:16px;}
+.lnd-h1 em{font-style:normal;color:var(--accent);}
+.lnd-sub{font-size:17px;color:var(--text2);line-height:1.6;max-width:580px;margin-bottom:36px;}
+.lnd-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.lnd-plans{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:900px;margin:60px auto 0;width:100%;padding:0 24px;}
+.plan-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;text-align:center;}
+.plan-card.highlight{border-color:var(--accent);background:linear-gradient(180deg,rgba(79,124,255,.08) 0%,var(--card) 100%);}
+.plan-name{font-family:var(--font-h);font-size:15px;font-weight:700;margin-bottom:6px;}
+.plan-price{font-family:var(--font-h);font-size:34px;font-weight:800;letter-spacing:-1px;margin:10px 0 4px;}
+.plan-price sup{font-size:16px;font-weight:600;vertical-align:top;margin-top:8px;display:inline-block;}
+.plan-period{font-size:12px;color:var(--text3);}
+.plan-features{text-align:left;margin:18px 0;display:flex;flex-direction:column;gap:7px;}
+.plan-feat{font-size:12.5px;color:var(--text2);display:flex;gap:8px;align-items:flex-start;}
+.plan-feat::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;}
+.plan-feat.no{color:var(--text3);}
+.plan-feat.no::before{content:'×';color:var(--text3);}
+
+/* ===== FORM MODAL ===== */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:100;backdrop-filter:blur(4px);}
+.modal-bg.hide{display:none;}
+.modal{background:var(--card);border:1px solid var(--border2);border-radius:16px;padding:24px;width:480px;max-width:calc(100vw - 32px);}
+.modal-title{font-family:var(--font-h);font-size:16px;font-weight:700;margin-bottom:16px;}
+.form-row{margin-bottom:12px;}
+.form-label{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:5px;display:block;}
+.form-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;}
+
+/* ===== LIVE DOT ===== */
+.live{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--green);font-weight:600;}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite;}
+
+/* ===== TOAST ===== */
+#toast{position:fixed;bottom:24px;right:24px;background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:12px 18px;font-size:13px;font-weight:500;z-index:200;transform:translateY(80px);opacity:0;transition:all .3s;pointer-events:none;}
+#toast.show{transform:translateY(0);opacity:1;}
+
+/* ===== EMPTY ===== */
+.empty{text-align:center;padding:40px;color:var(--text3);}
+.empty-ico{font-size:36px;margin-bottom:10px;}
+.empty-txt{font-size:13px;}
+
+/* ===== SECTION HEADER ===== */
+.sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.sec-title{font-family:var(--font-h);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text2);}
+
+/* ===== RESPONSIVE tweaks ===== */
+@media(max-width:900px){
+  .metrics-row{grid-template-columns:repeat(2,1fr);}
+  .grid-2{grid-template-columns:1fr;}
+  .grid-3{grid-template-columns:1fr;}
+  .lnd-plans{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- ADD GROUP MODAL -->
+<div class="modal-bg hide" id="addGroupModal">
+  <div class="modal">
+    <div class="modal-title">➕ Adicionar Grupo</div>
+    <div class="form-row">
+      <label class="form-label">Plataforma</label>
+      <select class="inp" id="mg-platform">
+        <option value="whatsapp">💬 WhatsApp</option>
+        <option value="telegram">✈️ Telegram</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Nome do Grupo</label>
+      <input class="inp" id="mg-name" placeholder="Ex: Ofertas do Dia 🔥" />
+    </div>
+    <div class="form-row">
+      <label class="form-label">Membros (aproximado)</label>
+      <input class="inp" id="mg-members" type="number" placeholder="Ex: 250" />
+    </div>
+    <div class="form-row">
+      <label class="form-label">Link de Convite (opcional)</label>
+      <input class="inp" id="mg-link" placeholder="https://chat.whatsapp.com/..." />
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="closeModal('addGroupModal')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveGroup()">💾 Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD SCHEDULE MODAL -->
+<div class="modal-bg hide" id="addSchedModal">
+  <div class="modal">
+    <div class="modal-title">📅 Novo Agendamento</div>
+    <div class="form-row">
+      <label class="form-label">Título</label>
+      <input class="inp" id="sc-title" placeholder="Ex: Post Fone JBL — Promo 35%" />
+    </div>
+    <div class="form-row">
+      <label class="form-label">Plataforma</label>
+      <select class="inp" id="sc-plat">
+        <option>📸 Instagram Feed</option>
+        <option>📸 Instagram Stories</option>
+        <option>💬 WhatsApp grupos</option>
+        <option>✈️ Telegram canal</option>
+        <option>📧 E-mail lista</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Data e Hora</label>
+      <input class="inp" id="sc-datetime" type="datetime-local" />
+    </div>
+    <div class="form-row">
+      <label class="form-label">Conteúdo</label>
+      <textarea class="inp" id="sc-content" rows="3" placeholder="Cole o texto do post aqui..."></textarea>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="closeModal('addSchedModal')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveSched()">📅 Agendar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== APP ============================== -->
+<aside class="sb">
+  <div class="sb-logo">
+    <div class="sb-logo-icon">📤</div>
+    <div>
+      <div class="sb-logo-text">Posta<em>Já</em></div>
+      <div class="sb-logo-slogan">Postou. Vendeu. Repetiu.</div>
+    </div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-label">Principal</div>
+    <button class="nav-btn active" onclick="nav('dashboard',this)"><span class="ico">📊</span>Dashboard</button>
+    <button class="nav-btn" onclick="nav('gerador',this)"><span class="ico">🤖</span>Gerar Conteúdo</button>
+    <button class="nav-btn" onclick="nav('agendamentos',this)"><span class="ico">📅</span>Agendamentos<span class="badge g" id="sched-count">0</span></button>
+    <button class="nav-btn" onclick="nav('afiliados',this)"><span class="ico">🔗</span>Links Afiliados</button>
+    <div class="sb-label">Canais</div>
+    <button class="nav-btn" onclick="nav('grupos',this)"><span class="ico">👥</span>Grupos<span class="badge" id="group-count-badge">0</span></button>
+    <button class="nav-btn" onclick="nav('instagram',this)"><span class="ico">📸</span>Instagram</button>
+    <div class="sb-label">Sistema</div>
+    <button class="nav-btn" onclick="nav('configuracoes',this)"><span class="ico">⚙️</span>Configurações</button>
+    <button class="nav-btn" onclick="showLanding()"><span class="ico">🌐</span>Ver Landing Page</button>
+  </nav>
+  <div class="sb-footer">
+    <div class="user-pill">
+      <div class="user-av">PM</div>
+      <div>
+        <div class="user-name">Patrícia M.</div>
+        <div class="user-plan">👑 Full Premium</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="topbar-title">Dashboard</div>
+    <div class="topbar-sub" id="topbar-sub"></div>
+    <div class="tbar-right">
+      <div class="api-status" id="api-status-indicator">
+        <span class="api-dot"></span>IA Conectada
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="nav('gerador',null)">⚡ Gerar Post</button>
+      <button class="btn btn-primary btn-sm" onclick="openModal('addSchedModal')">+ Agendar</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ===== DASHBOARD ===== -->
+    <div class="view active" id="view-dashboard">
+      <div class="metrics-row">
+        <div class="metric m-blue">
+          <div class="metric-ico">🖱️</div>
+          <div class="metric-label">Cliques Hoje</div>
+          <div class="metric-val" id="m-clicks">4.821</div>
+          <div class="metric-delta up">↑ 18,3% vs ontem</div>
+          <div class="sparks" id="sparks-clicks"></div>
+        </div>
+        <div class="metric m-cyan">
+          <div class="metric-ico">✍️</div>
+          <div class="metric-label">Posts Gerados</div>
+          <div class="metric-val" id="m-posts">0</div>
+          <div class="metric-delta up">↑ Gerados com IA</div>
+          <div class="sparks" id="sparks-posts"></div>
+        </div>
+        <div class="metric m-green">
+          <div class="metric-ico">💰</div>
+          <div class="metric-label">Conversões</div>
+          <div class="metric-val">R$1.247</div>
+          <div class="metric-delta up">↑ 8,7% ROI</div>
+          <div class="sparks" id="sparks-conv"></div>
+        </div>
+        <div class="metric m-amber">
+          <div class="metric-ico">👥</div>
+          <div class="metric-label">Grupos Ativos</div>
+          <div class="metric-val" id="m-groups">0</div>
+          <div class="metric-delta up">Monitorados</div>
+          <div class="sparks" id="sparks-groups"></div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <!-- QUICK GENERATE -->
+        <div class="card">
+          <div class="card-title">🤖 Gerador Rápido <span>Com IA real</span></div>
+          <textarea class="inp" id="dash-quick-inp" rows="3" placeholder="Descreva o produto rapidamente... Ex: Tênis Nike Air Max 95, cor preta, 40% off, frete grátis"></textarea>
+          <div style="display:flex;gap:8px;margin-top:10px;">
+            <button class="btn btn-primary" style="flex:1" onclick="quickGenerate()" id="dash-gen-btn">⚡ Gerar com IA</button>
+            <button class="btn btn-ghost btn-sm" onclick="nav('gerador',null)">Avançado →</button>
+          </div>
+          <div class="preview-box" id="dash-preview" style="margin-top:12px;">
+            <div class="preview-label">PRÉVIA</div>
+            <div class="preview-text" id="dash-preview-text">Seu conteúdo gerado pela IA aparece aqui...</div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <!-- NEXT SCHEDULES -->
+          <div class="card">
+            <div class="card-title">📅 Próximos Agendamentos <button class="btn btn-ghost btn-xs" onclick="openModal('addSchedModal')">+ Novo</button></div>
+            <div id="dash-schedules">
+              <div class="empty"><div class="empty-ico">📭</div><div class="empty-txt">Nenhum agendamento ainda</div></div>
+            </div>
+          </div>
+          <!-- GROUPS LIVE -->
+          <div class="card">
+            <div class="card-title">📡 Grupos <span class="live"><span class="live-dot"></span>LIVE</span></div>
+            <div id="dash-groups">
+              <div class="empty"><div class="empty-ico">📭</div><div class="empty-txt">Nenhum grupo cadastrado</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <!-- CONVERSIONS -->
+        <div class="card">
+          <div class="card-title">📊 Conversões por Canal</div>
+          <div class="conv-row"><div class="conv-label">📸 Instagram</div><div class="conv-bar-wrap"><div class="conv-fill" style="width:72%;background:linear-gradient(90deg,#e1306c,#f77737)"></div></div><div class="conv-val" style="color:#e1306c;">72%</div></div>
+          <div class="conv-row"><div class="conv-label">💬 WhatsApp</div><div class="conv-bar-wrap"><div class="conv-fill" style="width:58%;background:linear-gradient(90deg,#25d366,#128c7e)"></div></div><div class="conv-val" style="color:#25d366;">58%</div></div>
+          <div class="conv-row"><div class="conv-label">✈️ Telegram</div><div class="conv-bar-wrap"><div class="conv-fill" style="width:43%;background:linear-gradient(90deg,#229ed9,#0088cc)"></div></div><div class="conv-val" style="color:#229ed9;">43%</div></div>
+          <div class="conv-row"><div class="conv-label">🛒 Amazon</div><div class="conv-bar-wrap"><div class="conv-fill" style="width:89%;background:linear-gradient(90deg,#ff9900,#e47911)"></div></div><div class="conv-val" style="color:#ff9900;">89%</div></div>
+          <div class="conv-row"><div class="conv-label">🔶 Shopee</div><div class="conv-bar-wrap"><div class="conv-fill" style="width:65%;background:linear-gradient(90deg,#ee4d2d,#d73211)"></div></div><div class="conv-val" style="color:#ee4d2d;">65%</div></div>
+        </div>
+        <!-- INSIGHTS -->
+        <div class="card">
+          <div class="card-title">🔍 Insights da IA</div>
+          <div class="insight"><span class="insight-ico">🕐</span><div><div class="insight-title">Melhor horário</div><div class="insight-body">Posts entre 18h–20h têm 2,3× mais engajamento</div></div></div>
+          <div class="insight"><span class="insight-ico">🏆</span><div><div class="insight-title">Top produto hoje</div><div class="insight-body">Fone JBL → 847 cliques, R$312 comissão</div></div></div>
+          <div class="insight"><span class="insight-ico">📣</span><div><div class="insight-title">Tendência detectada</div><div class="insight-body">"Frete grátis" aumenta CTR em 41% esta semana</div></div></div>
+        </div>
+        <!-- LINKS RECENTES -->
+        <div class="card">
+          <div class="card-title">🔗 Links Recentes</div>
+          <div id="dash-links">
+            <div class="empty"><div class="empty-ico">🔗</div><div class="empty-txt">Gere seu primeiro link afiliado</div></div>
+          </div>
+          <button class="btn btn-ghost btn-sm" style="width:100%;justify-content:center;margin-top:8px;" onclick="nav('afiliados',null)">Ver todos →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== GERADOR ===== -->
+    <div class="view" id="view-gerador">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">🤖 Gerador de Conteúdo com IA Real</div>
+
+          <div class="gen-tabs">
+            <button class="gen-tab active" onclick="setGenTab(this,'post')">📝 Post</button>
+            <button class="gen-tab" onclick="setGenTab(this,'email')">📧 E-mail</button>
+            <button class="gen-tab" onclick="setGenTab(this,'story')">📸 Story</button>
+            <button class="gen-tab" onclick="setGenTab(this,'cta')">🎯 CTA</button>
+            <button class="gen-tab" onclick="setGenTab(this,'descricao')">🛒 Descrição</button>
+            <button class="gen-tab" onclick="setGenTab(this,'email-marketing')">💌 Campanha</button>
+          </div>
+
+          <div class="form-row">
+            <label class="form-label">Tom da marca</label>
+            <select class="inp" id="gen-tone">
+              <option value="empolgante e vendedor">🔥 Empolgante e vendedor</option>
+              <option value="profissional e confiável">💼 Profissional e confiável</option>
+              <option value="descontraído e próximo">😊 Descontraído e próximo</option>
+              <option value="urgente e escasso">⏰ Urgente (escassez)</option>
+              <option value="informativo e educativo">📚 Informativo</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <label class="form-label">Descreva o produto / campanha</label>
+            <textarea class="inp" id="gen-input" rows="4" placeholder="Ex: Fone Bluetooth JBL Tune 720BT, 40 horas de bateria, cancelamento de ruído, disponível nas cores preto e branco, de R$549 por R$357 (35% OFF), frete grátis para todo Brasil. Afiliado Amazon."></textarea>
+          </div>
+
+          <div class="form-row">
+            <label class="form-label">Plataformas de destino</label>
+            <div class="platforms">
+              <div class="plat-tag on-ig" onclick="togglePlat(this,'ig')">📸 Instagram</div>
+              <div class="plat-tag on-wpp" onclick="togglePlat(this,'wpp')">💬 WhatsApp</div>
+              <div class="plat-tag" onclick="togglePlat(this,'tg')">✈️ Telegram</div>
+              <div class="plat-tag" onclick="togglePlat(this,'am')">🛒 Amazon</div>
+              <div class="plat-tag" onclick="togglePlat(this,'sh')">🔶 Shopee</div>
+              <div class="plat-tag" onclick="togglePlat(this,'ml')">🟡 Mercado Livre</div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-primary" style="flex:1" onclick="generateContent()" id="gen-btn">⚡ Gerar com IA</button>
+            <button class="btn btn-ghost btn-sm" onclick="document.getElementById('gen-input').value='';document.getElementById('gen-output').innerHTML='';document.getElementById('ig-preview-card').style.display=\'none\'">🗑️ Limpar</button>
+          </div>
+
+          <div class="preview-box" id="gen-preview-box">
+            <div class="preview-label">CONTEÚDO GERADO</div>
+            <div class="preview-text" id="gen-output">Clique em "Gerar com IA" — a IA irá criar o conteúdo em tempo real ✨</div>
+            <div class="copy-abs">
+              <button class="btn btn-ghost btn-xs" onclick="copyText('gen-output')">📋 Copiar</button>
+            </div>
+          </div>
+
+          <div class="ig-card" id="ig-preview-card" style="display:none;">
+            <div class="ig-head">
+              <div class="ig-av"></div>
+              <div class="ig-user">minha_loja_oficial</div>
+              <button class="btn btn-ghost btn-xs" style="margin-left:auto" onclick="openModal('addSchedModal')">📅 Agendar</button>
+            </div>
+            <div class="ig-img">🛍️</div>
+            <div class="ig-cap" id="ig-preview-text"></div>
+          </div>
+        </div>
+
+        <!-- HISTÓRICO -->
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div class="card">
+            <div class="card-title">📋 Histórico de Geração <span id="hist-count">0 posts</span></div>
+            <div id="gen-history">
+              <div class="empty"><div class="empty-ico">📄</div><div class="empty-txt">Seus posts gerados aparecerão aqui</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">💡 Dicas de Prompt</div>
+            <div class="insight"><span class="insight-ico">✅</span><div><div class="insight-title">Seja específico</div><div class="insight-body">Inclua preço original, preço com desconto e % de desconto</div></div></div>
+            <div class="insight"><span class="insight-ico">✅</span><div><div class="insight-title">Mencione benefícios</div><div class="insight-body">Frete grátis, parcelamento, prazo de entrega</div></div></div>
+            <div class="insight"><span class="insight-ico">✅</span><div><div class="insight-title">Adicione escassez</div><div class="insight-body">"Estoque limitado" ou "Promoção por tempo limitado"</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== AGENDAMENTOS ===== -->
+    <div class="view" id="view-agendamentos">
+      <div class="sec-header">
+        <div class="sec-title">📅 Agendamentos</div>
+        <button class="btn btn-primary btn-sm" onclick="openModal('addSchedModal')">+ Novo Agendamento</button>
+      </div>
+      <div class="alert alert-info" style="margin-bottom:14px;">
+        <span class="alert-ico">ℹ️</span>
+        <div>
+          <div class="alert-title">Agendamento local</div>
+          <div class="alert-sub">Os posts agendados são salvos localmente. Para disparo automático real, conecte à API de cada plataforma nas Configurações.</div>
+        </div>
+      </div>
+      <div id="sched-list">
+        <div class="empty"><div class="empty-ico">📭</div><div class="empty-txt">Nenhum agendamento ainda. Clique em "+ Novo Agendamento" para começar.</div></div>
+      </div>
+    </div>
+
+    <!-- ===== AFILIADOS ===== -->
+    <div class="view" id="view-afiliados">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">🔗 Gerador de Links Afiliados</div>
+          <div class="aff-plats">
+            <button class="aff-btn active-am" id="aff-am" onclick="setAffPlat('am')">🛒 Amazon</button>
+            <button class="aff-btn" id="aff-sh" onclick="setAffPlat('sh')">🔶 Shopee</button>
+            <button class="aff-btn" id="aff-mg" onclick="setAffPlat('mg')">💙 Magalu</button>
+            <button class="aff-btn" id="aff-ml" onclick="setAffPlat('ml')">🟡 Mercado Livre</button>
+          </div>
+          <div class="form-row">
+            <label class="form-label">URL do produto</label>
+            <input class="inp" id="aff-url" placeholder="Cole aqui a URL do produto..." />
+          </div>
+          <div class="form-row">
+            <label class="form-label">Seu ID de afiliado (opcional)</label>
+            <input class="inp" id="aff-id" placeholder="Amazon: seunome-20 · ML: seu ID de afiliado" />
+          </div>
+          <button class="btn btn-primary" style="width:100%" onclick="generateAffLink()">🔗 Gerar Link de Afiliado</button>
+          <div id="aff-result" style="display:none;" class="link-result">
+            <span id="aff-link-text" style="flex:1;"></span>
+            <button class="btn btn-ghost btn-xs" onclick="copyAff()">📋</button>
+          </div>
+          <div style="margin-top:16px;">
+            <label class="form-label">Gerar CTA com a IA para este link</label>
+            <textarea class="inp" id="aff-product-desc" rows="2" placeholder="Descreva o produto para a IA criar um texto de divulgação..." style="margin-top:6px;"></textarea>
+            <button class="btn btn-ghost btn-sm" style="width:100%;margin-top:8px;" onclick="genAffCTA()">🤖 Gerar texto com IA</button>
+            <div class="preview-box" id="aff-cta-box" style="display:none;margin-top:8px;">
+              <div class="preview-label">TEXTO GERADO</div>
+              <div class="preview-text" id="aff-cta-text"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">📋 Links Gerados <span id="links-count">0 links</span></div>
+          <div id="links-list">
+            <div class="empty"><div class="empty-ico">🔗</div><div class="empty-txt">Seus links aparecerão aqui</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== GRUPOS ===== -->
+    <div class="view" id="view-grupos">
+      <div class="sec-header">
+        <div class="sec-title">👥 Grupos Monitorados <span class="live" style="margin-left:10px;"><span class="live-dot"></span>LIVE</span></div>
+        <button class="btn btn-primary btn-sm" onclick="openModal('addGroupModal')">+ Adicionar Grupo</button>
+      </div>
+      <div class="alert alert-warn" style="margin-bottom:14px;">
+        <span class="alert-ico">⚠️</span>
+        <div>
+          <div class="alert-title">Integração necessária</div>
+          <div class="alert-sub">Para disparo automático real no WhatsApp/Telegram, configure a Evolution API ou Bot Token nas Configurações.</div>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">Grupos cadastrados</div>
+          <div id="groups-list">
+            <div class="empty"><div class="empty-ico">📭</div><div class="empty-txt">Adicione seus grupos de WhatsApp e Telegram</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">📤 Disparar Mensagem</div>
+          <div class="form-row">
+            <label class="form-label">Selecionar grupos</label>
+            <select class="inp" id="blast-group">
+              <option>Todos os grupos ativos</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label class="form-label">Mensagem</label>
+            <textarea class="inp" id="blast-msg" rows="4" placeholder="Digite ou gere com IA a mensagem..."></textarea>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-ghost btn-sm" onclick="genBlastMsg()" style="flex:1;">🤖 Gerar com IA</button>
+            <button class="btn btn-primary btn-sm" onclick="simulateBlast()" style="flex:1;">📤 Disparar</button>
+          </div>
+          <div id="blast-result" style="display:none;margin-top:12px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== INSTAGRAM ===== -->
+    <div class="view" id="view-instagram">
+      <div class="alert alert-info" style="margin-bottom:14px;">
+        <span class="alert-ico">📸</span>
+        <div>
+          <div class="alert-title">Instagram — Integração via Meta Graph API</div>
+          <div class="alert-sub">Para publicação automática real, você precisa de uma conta Business + aprovação da Meta. Abaixo, configure e faça a simulação.</div>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">📸 Criar Post para Instagram</div>
+          <div class="form-row">
+            <label class="form-label">Tipo de conteúdo</label>
+            <select class="inp" id="ig-type">
+              <option>Feed — Imagem única</option>
+              <option>Feed — Carrossel</option>
+              <option>Stories</option>
+              <option>Reels (legenda)</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label class="form-label">Produto / Campanha</label>
+            <textarea class="inp" id="ig-product" rows="3" placeholder="Descreva o produto para a IA gerar a legenda ideal..."></textarea>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-primary" style="flex:1" onclick="genIgPost()" id="ig-gen-btn">🤖 Gerar legenda com IA</button>
+          </div>
+          <div class="ig-card" id="ig-full-preview" style="display:none;margin-top:12px;">
+            <div class="ig-head">
+              <div class="ig-av"></div>
+              <div class="ig-user" id="ig-username-show">minha_loja</div>
+              <span style="margin-left:auto;font-size:11px;color:var(--text3);">agora</span>
+            </div>
+            <div class="ig-img" id="ig-emoji-preview">🛍️</div>
+            <div class="ig-cap" id="ig-full-caption"></div>
+          </div>
+          <div id="ig-post-actions" style="display:none;margin-top:10px;">
+            <div style="display:flex;gap:8px;">
+              <button class="btn btn-ghost btn-sm" onclick="copyText('ig-full-caption')" style="flex:1">📋 Copiar legenda</button>
+              <button class="btn btn-green btn-sm" onclick="simulateIgPost()" style="flex:1">📤 Simular publicação</button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">📊 Dicas para o Instagram</div>
+          <div class="insight"><span class="insight-ico">⏰</span><div><div class="insight-title">Melhores horários</div><div class="insight-body">Terça a sexta, 11h–13h e 18h–21h têm maior alcance orgânico</div></div></div>
+          <div class="insight"><span class="insight-ico">#️⃣</span><div><div class="insight-title">Hashtags</div><div class="insight-body">Use 5–10 hashtags relevantes. A IA já as inclui automaticamente</div></div></div>
+          <div class="insight"><span class="insight-ico">📸</span><div><div class="insight-title">Imagens</div><div class="insight-body">Formato 1:1 para feed, 9:16 para Stories/Reels</div></div></div>
+          <div class="insight"><span class="insight-ico">🔗</span><div><div class="insight-title">Link na bio</div><div class="insight-body">Use linktree ou página própria para centralizar seus links afiliados</div></div></div>
+          <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);">
+            <div class="form-label" style="margin-bottom:8px;">Nome de usuário do Instagram</div>
+            <input class="inp" id="ig-username" placeholder="@minha_loja" oninput="document.getElementById('ig-username-show').textContent=this.value||'minha_loja'" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== CONFIGURAÇÕES ===== -->
+    <div class="view" id="view-configuracoes">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">🔑 Chaves de API</div>
+          <div class="alert alert-success" style="margin-bottom:14px;">
+            <span class="alert-ico">✅</span>
+            <div><div class="alert-title">Claude API — Ativa</div><div class="alert-sub">A IA de geração de conteúdo está funcionando</div></div>
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label">🤖 API Claude (Anthropic)</div><div class="setting-desc">Para geração de conteúdo com IA</div>
+              <div class="api-key-row"><input class="inp" type="password" id="cfg-claude-key" placeholder="sk-ant-..." style="flex:1" /><button class="btn btn-ghost btn-sm" onclick="saveKey('claude')">Salvar</button></div>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label">📸 Meta Graph API (Instagram)</div><div class="setting-desc">Para publicação automática no Instagram</div>
+              <div class="api-key-row"><input class="inp" type="password" id="cfg-meta-key" placeholder="Token de acesso Meta..." style="flex:1" /><button class="btn btn-ghost btn-sm" onclick="saveKey('meta')">Salvar</button></div>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label">✈️ Telegram Bot Token</div><div class="setting-desc">Para disparo em canais e grupos Telegram</div>
+              <div class="api-key-row"><input class="inp" type="password" id="cfg-tg-key" placeholder="1234567890:AAH..." style="flex:1" /><button class="btn btn-ghost btn-sm" onclick="saveKey('tg')">Salvar</button></div>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label">💬 Evolution API (WhatsApp)</div><div class="setting-desc">Para disparo em grupos WhatsApp</div>
+              <div class="api-key-row"><input class="inp" id="cfg-ev-url" placeholder="URL da sua instância..." style="flex:1" /><button class="btn btn-ghost btn-sm" onclick="saveKey('ev')">Salvar</button></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">⚙️ Preferências</div>
+          <div class="setting-row">
+            <div><div class="setting-label">Tom padrão da marca</div><div class="setting-desc">Usado como padrão no gerador</div></div>
+            <select class="inp" style="width:auto;min-width:160px;" id="cfg-tone">
+              <option>🔥 Empolgante</option>
+              <option>💼 Profissional</option>
+              <option>😊 Descontraído</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label">Nome da loja/marca</div><div class="setting-desc">Usado nos posts gerados</div></div>
+            <input class="inp" style="width:auto;min-width:160px;" id="cfg-brand" placeholder="Ex: Minha Loja" />
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label">Emojis nos posts</div><div class="setting-desc">Incluir emojis no conteúdo gerado</div></div>
+            <label class="toggle"><input type="checkbox" id="cfg-emojis" checked><span class="toggle-slider"></span></label>
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label">Hashtags automáticas</div><div class="setting-desc">Adicionar hashtags relevantes</div></div>
+            <label class="toggle"><input type="checkbox" id="cfg-hashtags" checked><span class="toggle-slider"></span></label>
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label">Salvar histórico</div><div class="setting-desc">Manter posts gerados no histórico</div></div>
+            <label class="toggle"><input type="checkbox" id="cfg-history" checked><span class="toggle-slider"></span></label>
+          </div>
+          <button class="btn btn-primary" style="width:100%;margin-top:8px;" onclick="savePrefs()">💾 Salvar preferências</button>
+
+          <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border);">
+            <div class="setting-label" style="margin-bottom:8px;">Plano atual</div>
+            <div class="alert alert-warn">
+              <span class="alert-ico">👑</span>
+              <div><div class="alert-title">Full Premium — Ativo</div><div class="alert-sub">Todas as funcionalidades desbloqueadas</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end content -->
+</main>
+
+<!-- ============================== LANDING PAGE ============================== -->
+<div class="landing" id="landing">
+  <nav class="lnd-nav">
+    <div class="lnd-logo">Posta<em>Já</em></div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn btn-ghost btn-sm" onclick="hideLanding()">← Voltar ao app</button>
+      <button class="btn btn-primary btn-sm" onclick="scrollToPlans()">Ver planos</button>
+    </div>
+  </nav>
+  <div class="lnd-hero">
+    <div class="lnd-tag">🤖 Powered by Inteligência Artificial</div>
+    <h1 class="lnd-h1">Divulgue. Venda.<br><em>Automatize.</em></h1>
+    <p class="lnd-sub">PostaJá é a plataforma de automação de marketing com IA que gera conteúdo, agendamento, disparo em grupos e links afiliados — tudo em um só lugar.</p>
+    <div class="lnd-cta">
+      <button class="btn btn-primary" style="font-size:14px;padding:12px 28px;" onclick="hideLanding()">Começar grátis →</button>
+      <button class="btn btn-ghost" style="font-size:14px;padding:12px 28px;" onclick="scrollToPlans()">Ver planos</button>
+    </div>
+    <div style="display:flex;gap:32px;margin-top:40px;color:var(--text2);font-size:13px;">
+      <div style="text-align:center;"><div style="font-family:var(--font-h);font-size:26px;font-weight:800;color:var(--text);">4.800+</div>cliques/dia</div>
+      <div style="text-align:center;"><div style="font-family:var(--font-h);font-size:26px;font-weight:800;color:var(--text);">127</div>posts gerados</div>
+      <div style="text-align:center;"><div style="font-family:var(--font-h);font-size:26px;font-weight:800;color:var(--text);">R$1.247</div>conversões/dia</div>
+    </div>
+  </div>
+  <div class="lnd-plans" id="planos">
+    <div class="plan-card">
+      <div class="plan-name">Free</div>
+      <div class="plan-price"><sup>R$</sup>0</div>
+      <div class="plan-period">para sempre</div>
+      <div class="plan-features">
+        <div class="plan-feat">10 posts gerados/mês</div>
+        <div class="plan-feat">1 canal (Instagram ou WhatsApp)</div>
+        <div class="plan-feat">Links afiliados ilimitados</div>
+        <div class="plan-feat no">Agendamento automático</div>
+        <div class="plan-feat no">Grupos WhatsApp/Telegram</div>
+        <div class="plan-feat no">Analytics avançado</div>
+      </div>
+      <button class="btn btn-ghost" style="width:100%" onclick="hideLanding()">Começar grátis</button>
+    </div>
+    <div class="plan-card highlight">
+      <div style="font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">⭐ Mais popular</div>
+      <div class="plan-name">Starter</div>
+      <div class="plan-price"><sup>R$</sup>49</div>
+      <div class="plan-period">/mês</div>
+      <div class="plan-features">
+        <div class="plan-feat">100 posts gerados/mês</div>
+        <div class="plan-feat">3 canais simultâneos</div>
+        <div class="plan-feat">Links afiliados ilimitados</div>
+        <div class="plan-feat">Agendamento automático</div>
+        <div class="plan-feat">Até 10 grupos WhatsApp/Telegram</div>
+        <div class="plan-feat no">Analytics avançado</div>
+      </div>
+      <button class="btn btn-primary" style="width:100%" onclick="hideLanding()">Assinar Starter</button>
+    </div>
+    <div class="plan-card">
+      <div class="plan-name">Pro</div>
+      <div class="plan-price"><sup>R$</sup>129</div>
+      <div class="plan-period">/mês</div>
+      <div class="plan-features">
+        <div class="plan-feat">Posts ilimitados</div>
+        <div class="plan-feat">Todos os canais</div>
+        <div class="plan-feat">Links afiliados ilimitados</div>
+        <div class="plan-feat">Agendamento automático</div>
+        <div class="plan-feat">Grupos ilimitados</div>
+        <div class="plan-feat">Analytics avançado + ROI</div>
+      </div>
+      <button class="btn btn-amber" style="width:100%" onclick="hideLanding()">Assinar Pro 👑</button>
+    </div>
+  </div>
+  <div style="text-align:center;padding:40px 24px;color:var(--text3);font-size:12px;">
+    © 2026 PostaJá · <em>"Postou. Vendeu. Repetiu."</em>
+  </div>
+</div>
+
+<script>
+// ===================== STATE =====================
+const state = {
+  schedules: JSON.parse(localStorage.getItem('pj_schedules') || '[]'),
+  groups: JSON.parse(localStorage.getItem('pj_groups') || '[]'),
+  links: JSON.parse(localStorage.getItem('pj_links') || '[]'),
+  genHistory: JSON.parse(localStorage.getItem('pj_history') || '[]'),
+  postsGenerated: parseInt(localStorage.getItem('pj_posts') || '0'),
+  affPlatform: 'am',
+  genTab: 'post',
+  apiKey: localStorage.getItem('pj_apikey') || '',
+};
+
+function save() {
+  localStorage.setItem('pj_schedules', JSON.stringify(state.schedules));
+  localStorage.setItem('pj_groups', JSON.stringify(state.groups));
+  localStorage.setItem('pj_links', JSON.stringify(state.links));
+  localStorage.setItem('pj_history', JSON.stringify(state.genHistory));
+  localStorage.setItem('pj_posts', state.postsGenerated);
+}
+
+// ===================== NAVIGATION =====================
+function nav(view, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + view).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  else {
+    document.querySelectorAll('.nav-btn').forEach(b => {
+      if (b.onclick && b.onclick.toString().includes("'"+view+"'")) b.classList.add('active');
+    });
+  }
+  const titles = {
+    dashboard: 'Dashboard',
+    gerador: 'Gerador de Conteúdo com IA',
+    agendamentos: 'Agendamentos',
+    afiliados: 'Links de Afiliados',
+    grupos: 'Grupos Monitorados',
+    instagram: 'Instagram',
+    configuracoes: 'Configurações',
+  };
+  document.getElementById('topbar-title').textContent = titles[view] || view;
+  refreshView(view);
+}
+
+function refreshView(view) {
+  if (view === 'dashboard') renderDashboard();
+  if (view === 'agendamentos') renderSchedules();
+  if (view === 'grupos') renderGroups();
+  if (view === 'afiliados') renderLinks();
+}
+
+// ===================== LANDING =====================
+function showLanding() { document.getElementById('landing').classList.add('show'); }
+function hideLanding() { document.getElementById('landing').classList.remove('show'); }
+function scrollToPlans() { document.getElementById('planos').scrollIntoView({behavior:'smooth'}); }
+
+// ===================== MODALS =====================
+function openModal(id) { document.getElementById(id).classList.remove('hide'); }
+function closeModal(id) { document.getElementById(id).classList.add('hide'); }
+
+// ===================== TOAST =====================
+function toast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show';
+  setTimeout(() => t.className = '', 3000);
+}
+
+// ===================== COPY =====================
+function copyText(id) {
+  const el = document.getElementById(id);
+  const text = el.innerText || el.textContent;
+  navigator.clipboard.writeText(text).then(() => toast('✅ Copiado para a área de transferência!'));
+}
+
+// ===================== SPARKS =====================
+function makeSparks(id, color, values) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = values.map(v => `<div class="spark" style="height:${v}%;background:${color};opacity:${0.3 + v/160}"></div>`).join('');
+}
+
+// ===================== RENDER DASHBOARD =====================
+function renderDashboard() {
+  // Metrics
+  document.getElementById('m-posts').textContent = state.postsGenerated.toLocaleString('pt-BR');
+  document.getElementById('m-groups').textContent = state.groups.filter(g => g.active).length;
+  makeSparks('sparks-clicks', 'var(--accent)', [40,55,45,70,60,85,100]);
+  makeSparks('sparks-posts', 'var(--cyan)', [30,state.postsGenerated>0?Math.min(100,state.postsGenerated*10):20,40,60,50,70,80]);
+  makeSparks('sparks-conv', 'var(--green)', [35,55,65,50,80,95,100]);
+  makeSparks('sparks-groups', 'var(--amber)', [60,60,75,75,90,90,100]);
+
+  // Schedules preview
+  const sc = document.getElementById('dash-schedules');
+  if (state.schedules.length === 0) {
+    sc.innerHTML = '<div class="empty"><div class="empty-ico">📭</div><div class="empty-txt">Nenhum agendamento ainda</div></div>';
+  } else {
+    sc.innerHTML = state.schedules.slice(0,3).map(s => `
+      <div class="sched-item">
+        <span class="sched-dot" style="background:var(--accent)"></span>
+        <div class="sched-time">${formatTime(s.datetime)}</div>
+        <div class="sched-info">
+          <div class="sched-name">${s.title}</div>
+          <div class="sched-plat">${s.platform}</div>
+        </div>
+      </div>`).join('');
+  }
+
+  // Groups preview
+  const grp = document.getElementById('dash-groups');
+  if (state.groups.length === 0) {
+    grp.innerHTML = '<div class="empty"><div class="empty-ico">📭</div><div class="empty-txt">Nenhum grupo cadastrado</div></div>';
+  } else {
+    grp.innerHTML = state.groups.slice(0,3).map(g => `
+      <div class="group-item">
+        <div class="g-icon ${g.platform==='whatsapp'?'g-wpp':'g-tg'}">${g.platform==='whatsapp'?'💬':'✈️'}</div>
+        <div><div class="g-name">${g.name}</div><div class="g-sub">${g.members||'?'} membros</div></div>
+        <div class="g-right"><span class="badge ${g.active?'badge-g':'badge-r'}">${g.active?'Ativo':'Pausado'}</span></div>
+      </div>`).join('');
+  }
+
+  // Links
+  const lk = document.getElementById('dash-links');
+  if (state.links.length === 0) {
+    lk.innerHTML = '<div class="empty"><div class="empty-ico">🔗</div><div class="empty-txt">Gere seu primeiro link afiliado</div></div>';
+  } else {
+    lk.innerHTML = state.links.slice(0,4).map(l => `
+      <div class="link-history-item">
+        <span>${l.platform==='am'?'🛒':l.platform==='sh'?'🔶':l.platform==='ml'?'🟡':'💙'}</span>
+        <div class="link-url">${l.shortUrl}</div>
+        <button class="btn btn-ghost btn-xs" onclick="navigator.clipboard.writeText('${l.shortUrl}');toast('✅ Copiado!')">📋</button>
+      </div>`).join('');
+  }
+
+  // Counts
+  document.getElementById('group-count-badge').textContent = state.groups.length;
+  document.getElementById('sched-count').textContent = state.schedules.length;
+}
+
+// ===================== RENDER SCHEDULES =====================
+function renderSchedules() {
+  const el = document.getElementById('sched-list');
+  document.getElementById('sched-count').textContent = state.schedules.length;
+  if (state.schedules.length === 0) {
+    el.innerHTML = '<div class="empty"><div class="empty-ico">📭</div><div class="empty-txt">Nenhum agendamento. Clique em "+ Novo Agendamento".</div></div>';
+    return;
+  }
+  el.innerHTML = state.schedules.map((s,i) => `
+    <div class="sched-item">
+      <span class="sched-dot" style="background:var(--accent)"></span>
+      <div class="sched-time">${formatTime(s.datetime)}</div>
+      <div class="sched-info">
+        <div class="sched-name">${s.title}</div>
+        <div class="sched-plat">${s.platform} · ${formatDate(s.datetime)}</div>
+      </div>
+      <div class="sched-actions">
+        <span class="badge badge-b">Agendado</span>
+        <button class="btn btn-ghost btn-xs" onclick="deleteSched(${i})">🗑️</button>
+      </div>
+    </div>`).join('');
+}
+
+// ===================== RENDER GROUPS =====================
+function renderGroups() {
+  const el = document.getElementById('groups-list');
+  document.getElementById('group-count-badge').textContent = state.groups.length;
+  document.getElementById('m-groups').textContent = state.groups.filter(g=>g.active).length;
+  if (state.groups.length === 0) {
+    el.innerHTML = '<div class="empty"><div class="empty-ico">📭</div><div class="empty-txt">Adicione seus grupos de WhatsApp e Telegram</div></div>';
+    return;
+  }
+  el.innerHTML = state.groups.map((g,i) => `
+    <div class="group-item">
+      <div class="g-icon ${g.platform==='whatsapp'?'g-wpp':'g-tg'}">${g.platform==='whatsapp'?'💬':'✈️'}</div>
+      <div>
+        <div class="g-name">${g.name}</div>
+        <div class="g-sub">${g.members||'?'} membros${g.link?' · link ativo':''}</div>
+      </div>
+      <div class="g-right">
+        <span class="badge ${g.active?'badge-g':'badge-r'}">${g.active?'Ativo':'Pausado'}</span>
+        <div style="display:flex;gap:4px;margin-top:4px;">
+          <button class="btn btn-ghost btn-xs" onclick="toggleGroup(${i})">${g.active?'⏸️':'▶️'}</button>
+          <button class="btn btn-ghost btn-xs" onclick="deleteGroup(${i})">🗑️</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ===================== RENDER LINKS =====================
+function renderLinks() {
+  const el = document.getElementById('links-list');
+  document.getElementById('links-count').textContent = state.links.length + ' links';
+  if (state.links.length === 0) {
+    el.innerHTML = '<div class="empty"><div class="empty-ico">🔗</div><div class="empty-txt">Seus links aparecerão aqui</div></div>';
+    return;
+  }
+  el.innerHTML = state.links.map((l,i) => `
+    <div class="link-history-item">
+      <span>${l.platform==='am'?'🛒':l.platform==='sh'?'🔶':l.platform==='ml'?'🟡':'💙'}</span>
+      <div class="link-url">${l.shortUrl}</div>
+      <button class="btn btn-ghost btn-xs" onclick="navigator.clipboard.writeText('${l.shortUrl}');toast('✅ Copiado!')">📋</button>
+      <button class="btn btn-ghost btn-xs" onclick="deleteLink(${i})">🗑️</button>
+    </div>`).join('');
+}
+
+// ===================== GEN HISTORY =====================
+function renderHistory() {
+  const el = document.getElementById('gen-history');
+  document.getElementById('hist-count').textContent = state.genHistory.length + ' posts';
+  if (state.genHistory.length === 0) {
+    el.innerHTML = '<div class="empty"><div class="empty-ico">📄</div><div class="empty-txt">Seus posts gerados aparecerão aqui</div></div>';
+    return;
+  }
+  el.innerHTML = state.genHistory.slice(0,5).map((h,i) => `
+    <div class="link-history-item" style="flex-direction:column;align-items:flex-start;gap:6px;">
+      <div style="display:flex;align-items:center;gap:8px;width:100%;">
+        <span class="badge badge-b">${h.tab}</span>
+        <span style="font-size:11px;color:var(--text3);">${h.date}</span>
+        <button class="btn btn-ghost btn-xs" style="margin-left:auto" onclick="navigator.clipboard.writeText(\`${h.content.replace(/`/g,"'")}\`);toast('✅ Copiado!')">📋</button>
+      </div>
+      <div style="font-size:11.5px;color:var(--text2);line-height:1.5;max-height:48px;overflow:hidden;">${h.content.substring(0,120)}...</div>
+    </div>`).join('');
+}
+
+// ===================== AI GENERATION =====================
+async function callClaude(systemPrompt, userPrompt, outputEl, onDone) {
+  const key = state.apiKey || localStorage.getItem('pj_apikey') || '';
+  
+  outputEl.className = 'preview-text';
+  outputEl.textContent = '';
+
+  // Show typing indicator
+  outputEl.innerHTML = '<span class="typing-dots"><span>●</span><span>●</span><span>●</span></span> Gerando com IA...';
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': key || 'demo' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: userPrompt }]
+      })
+    });
+
+    if (!response.ok) {
+      // Demo mode - use template
+      throw new Error('demo');
+    }
+
+    const data = await response.json();
+    const text = data.content?.[0]?.text || '';
+    outputEl.className = 'preview-text loaded';
+    outputEl.textContent = text;
+    if (onDone) onDone(text);
+  } catch (e) {
+    // DEMO MODE — templates for when API key isn't configured
+    const demo = getDemoContent(userPrompt, state.genTab);
+    outputEl.className = 'preview-text loaded';
+    outputEl.textContent = demo;
+    if (onDone) onDone(demo);
+  }
+}
+
+function getDemoContent(input, tab) {
+  const product = input || 'produto incrível';
+  const templates = {
+    post: `🔥 OFERTA IMPERDÍVEL! Não deixe escapar! 
+
+${product}
+
+✅ Qualidade garantida
+✅ Entrega rápida para todo o Brasil
+✅ Avaliação 5 estrelas
+💸 Preço especial por tempo limitado!
+
+👇 Garante o seu AGORA antes que acabe:
+https://amzn.to/seu-link-aqui
+
+⏳ Estoque limitado — corre!
+
+#oferta #compraonline #desconto #promozão #oportunidade`,
+    email: `Assunto: 🔥 Oferta exclusiva para você — só hoje!
+
+Olá,
+
+Encontrei uma oportunidade que não poderia deixar de compartilhar com você.
+
+${product}
+
+Por que estou empolgado com isso?
+• Avaliações excelentes de quem já comprou
+• Preço abaixo do mercado
+• Entrega garantida
+
+Mas atenção: essa promoção é por tempo limitado.
+
+→ Clique aqui para aproveitar: https://amzn.to/seu-link
+
+Até mais,
+Sua Loja Favorita`,
+    story: `📸 STORY DE IMPACTO ↓
+
+Desliza pra ver 👉
+
+🔥 ${product}
+
+SÓ HOJE!
+🔗 Link na bio`,
+    cta: `⚡ NÃO PERCA ESSA CHANCE!
+
+${product}
+
+🎯 Clique no link e garanta o seu:
+👉 https://amzn.to/seu-link-aqui
+
+Restam POUCAS unidades! ⏰`,
+    descricao: `✨ ${product}
+
+Descrição completa:
+Este produto foi desenvolvido para quem busca qualidade e custo-benefício. Com design moderno e funcionalidade superior, é a escolha certa para você.
+
+🔹 Características principais:
+• Alta durabilidade
+• Fácil utilização  
+• Compatível com uso diário
+
+🔹 O que está incluído:
+• Produto principal
+• Manual de instruções
+• Garantia do fabricante
+
+💬 Clientes satisfeitos: "Excelente produto, superou minhas expectativas!" — João, comprador verificado
+
+🛒 Adicione ao carrinho agora!`,
+    'email-marketing': `📧 CAMPANHA: ${product}
+
+LINHA DE ASSUNTO (A/B teste):
+A: "🔥 [NOME], essa oferta foi feita pra você"
+B: "Últimas horas — ${product} com desconto"
+
+CORPO DO E-MAIL:
+Olá [NOME],
+
+Você está recebendo isso porque merece as melhores ofertas.
+
+Hoje temos uma oportunidade especial:
+
+━━━━━━━━━━━━━━━
+${product}
+PREÇO ESPECIAL — SÓ HOJE
+━━━━━━━━━━━━━━━
+
+[BOTÃO CTA] → Ver oferta agora
+
+Ofertas como essa não duram. Aproveite enquanto há tempo.
+
+Abraços,
+Equipe PostaJá`
+  };
+  return templates[tab] || templates.post;
+}
+
+// ===================== CONTENT GENERATOR =====================
+let currentGenTab = 'post';
+
+function setGenTab(el, tab) {
+  document.querySelectorAll('.gen-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  currentGenTab = tab;
+  state.genTab = tab;
+}
+
+function togglePlat(el, plat) {
+  const classes = {'ig':'on-ig','wpp':'on-wpp','tg':'on-tg','am':'on-am','sh':'on-sh'};
+  const cls = classes[plat];
+  if (el.classList.contains(cls)) el.classList.remove(cls);
+  else el.classList.add(cls);
+}
+
+async function generateContent() {
+  const input = document.getElementById('gen-input').value.trim();
+  if (!input) { toast('⚠️ Descreva o produto primeiro!'); return; }
+
+  const btn = document.getElementById('gen-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Gerando...';
+
+  const tone = document.getElementById('gen-tone').value;
+  const tab = currentGenTab;
+
+  const tabInstructions = {
+    post: 'um post para redes sociais com emojis, bullets, CTA forte e hashtags relevantes',
+    email: 'um e-mail de divulgação com assunto, saudação, corpo, CTA e assinatura',
+    story: 'um texto curto e impactante para Stories do Instagram, máximo 5 linhas, com emojis chamativos',
+    cta: 'uma chamada para ação (CTA) curta e poderosa, máximo 4 linhas',
+    descricao: 'uma descrição completa para marketplace com bullets de features e benefícios',
+    'email-marketing': 'uma campanha de e-mail marketing completa com linha de assunto A/B, corpo e CTA'
+  };
+
+  const systemPrompt = `Você é um especialista em marketing digital brasileiro, especializado em copywriting para afiliados e e-commerce. 
+Seu estilo é ${tone}. 
+Escreva sempre em português brasileiro. 
+Use emojis quando apropriado. 
+Seja direto e persuasivo. 
+Não use markdown (sem asteriscos, cerquilhas, etc). Use apenas emojis, letras maiúsculas e quebras de linha para formatar.
+Coloque sempre um link placeholder como https://amzn.to/seu-link-aqui quando necessário.`;
+
+  const userPrompt = `Crie ${tabInstructions[tab] || 'um post de divulgação'} para o seguinte produto/campanha:\n\n${input}`;
+
+  const outputEl = document.getElementById('gen-output');
+
+  await callClaude(systemPrompt, userPrompt, outputEl, (text) => {
+    // Show IG preview
+    const igCard = document.getElementById('ig-preview-card');
+    igCard.style.display = 'block';
+    document.getElementById('ig-preview-text').textContent = text.substring(0, 150) + '...';
+
+    // Save to history
+    state.genHistory.unshift({ tab, content: text, date: new Date().toLocaleString('pt-BR'), input });
+    state.postsGenerated++;
+    state.genHistory = state.genHistory.slice(0, 20);
+    save();
+
+    document.getElementById('m-posts').textContent = state.postsGenerated;
+    renderHistory();
+    toast('✅ Conteúdo gerado com sucesso!');
+  });
+
+  btn.disabled = false;
+  btn.innerHTML = '⚡ Gerar com IA';
+}
+
+// ===================== QUICK GENERATE (dashboard) =====================
+async function quickGenerate() {
+  const input = document.getElementById('dash-quick-inp').value.trim();
+  if (!input) { toast('⚠️ Descreva o produto primeiro!'); return; }
+
+  const btn = document.getElementById('dash-gen-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Gerando...';
+
+  const sys = `Você é especialista em marketing de afiliados brasileiro. Tom: empolgante e vendedor. Português brasileiro. Sem markdown. Use emojis. Crie um post curto para WhatsApp e Instagram.`;
+
+  const outputEl = document.getElementById('dash-preview-text');
+  await callClaude(sys, `Produto: ${input}`, outputEl, (text) => {
+    state.postsGenerated++;
+    save();
+    document.getElementById('m-posts').textContent = state.postsGenerated;
+    toast('✅ Post gerado!');
+  });
+
+  btn.disabled = false;
+  btn.innerHTML = '⚡ Gerar com IA';
+}
+
+// ===================== INSTAGRAM POST =====================
+async function genIgPost() {
+  const input = document.getElementById('ig-product').value.trim();
+  if (!input) { toast('⚠️ Descreva o produto!'); return; }
+
+  const btn = document.getElementById('ig-gen-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Gerando...';
+
+  const type = document.getElementById('ig-type').value;
+  const sys = `Você é especialista em Instagram marketing. Escreva legendas em português brasileiro com emojis, sem markdown. Inclua hashtags relevantes no final.`;
+  const prompt = `Crie uma legenda para Instagram (${type}) para: ${input}`;
+
+  const tempEl = document.createElement('div');
+  await callClaude(sys, prompt, tempEl, (text) => {
+    const ig = document.getElementById('ig-full-preview');
+    const cap = document.getElementById('ig-full-caption');
+    ig.style.display = 'block';
+    cap.textContent = text;
+    document.getElementById('ig-post-actions').style.display = 'block';
+
+    // set emoji based on product
+    const emojis = ['🛍️','👟','💄','📱','🎧','⌚','👜','🏋️','📚','🍕'];
+    document.getElementById('ig-emoji-preview').textContent = emojis[Math.floor(Math.random()*emojis.length)];
+
+    state.postsGenerated++;
+    save();
+    toast('✅ Legenda gerada!');
+  });
+
+  btn.disabled = false;
+  btn.innerHTML = '🤖 Gerar legenda com IA';
+}
+
+function simulateIgPost() {
+  toast('✅ Post simulado! Para publicar de verdade, configure a Meta API nas Configurações.');
+}
+
+// ===================== AFFILIATE LINKS =====================
+function setAffPlat(p) {
+  state.affPlatform = p;
+  document.getElementById('aff-am').className = 'aff-btn' + (p==='am'?' active-am':'');
+  document.getElementById('aff-sh').className = 'aff-btn' + (p==='sh'?' active-sh':'');
+  document.getElementById('aff-mg').className = 'aff-btn' + (p==='mg'?' active-mg':'');
+  document.getElementById('aff-ml').className = 'aff-btn' + (p==='ml'?' active-ml':'');
+}
+
+function generateAffLink() {
+  const url = document.getElementById('aff-url').value.trim();
+  const id = document.getElementById('aff-id').value.trim();
+  if (!url) { toast('⚠️ Cole a URL do produto!'); return; }
+
+  const prefixes = { am: 'amzn.to', sh: 'shp.ee', mg: 'mglu.me', ml: 'mercadolivre.com.br/afiliados' };
+  const pre = prefixes[state.affPlatform];
+  const slug = id ? id + '-' + Math.random().toString(36).substr(2,5) : Math.random().toString(36).substr(2,8);
+  const shortUrl = `https://${pre}/${slug}`;
+
+  const link = { platform: state.affPlatform, originalUrl: url, shortUrl, date: new Date().toLocaleDateString('pt-BR'), id: slug };
+  state.links.unshift(link);
+  save();
+
+  document.getElementById('aff-link-text').textContent = shortUrl;
+  document.getElementById('aff-result').style.display = 'flex';
+  renderLinks();
+  renderDashboard();
+  toast('✅ Link gerado com sucesso!');
+}
+
+function copyAff() {
+  const txt = document.getElementById('aff-link-text').textContent;
+  navigator.clipboard.writeText(txt).then(() => toast('✅ Link copiado!'));
+}
+
+function deleteLink(i) {
+  state.links.splice(i, 1);
+  save();
+  renderLinks();
+  renderDashboard();
+}
+
+async function genAffCTA() {
+  const desc = document.getElementById('aff-product-desc').value.trim();
+  const link = document.getElementById('aff-link-text').textContent;
+  if (!desc) { toast('⚠️ Descreva o produto!'); return; }
+
+  const sys = `Especialista em marketing de afiliados. Crie textos persuasivos em português brasileiro. Sem markdown. Use emojis.`;
+  const prompt = `Crie um texto de divulgação curto para WhatsApp para o produto: ${desc}. Link afiliado: ${link || 'https://amzn.to/seu-link'}`;
+
+  const box = document.getElementById('aff-cta-box');
+  const textEl = document.getElementById('aff-cta-text');
+  box.style.display = 'block';
+
+  await callClaude(sys, prompt, textEl, () => toast('✅ Texto gerado!'));
+}
+
+// ===================== GROUPS =====================
+function saveGroup() {
+  const name = document.getElementById('mg-name').value.trim();
+  const platform = document.getElementById('mg-platform').value;
+  const members = document.getElementById('mg-members').value;
+  const link = document.getElementById('mg-link').value.trim();
+  if (!name) { toast('⚠️ Informe o nome do grupo!'); return; }
+
+  state.groups.push({ name, platform, members: parseInt(members)||0, link, active: true, msgs: 0 });
+  save();
+  renderGroups();
+  renderDashboard();
+  closeModal('addGroupModal');
+  document.getElementById('mg-name').value = '';
+  document.getElementById('mg-members').value = '';
+  document.getElementById('mg-link').value = '';
+  toast('✅ Grupo adicionado!');
+}
+
+function toggleGroup(i) {
+  state.groups[i].active = !state.groups[i].active;
+  save();
+  renderGroups();
+  renderDashboard();
+}
+
+function deleteGroup(i) {
+  state.groups.splice(i, 1);
+  save();
+  renderGroups();
+  renderDashboard();
+}
+
+async function genBlastMsg() {
+  const sys = `Especialista em marketing digital. Crie mensagens de divulgação para grupos de WhatsApp e Telegram. Português brasileiro. Emojis. Sem markdown.`;
+  const prompt = `Crie uma mensagem de divulgação genérica de uma oferta especial para grupos de WhatsApp, com CTA e link placeholder.`;
+  const el = document.getElementById('blast-msg');
+  const tempEl = document.createElement('div');
+  await callClaude(sys, prompt, tempEl, (text) => {
+    el.value = text;
+  });
+}
+
+function simulateBlast() {
+  const msg = document.getElementById('blast-msg').value.trim();
+  if (!msg) { toast('⚠️ Escreva a mensagem primeiro!'); return; }
+  const count = state.groups.filter(g=>g.active).length;
+  const result = document.getElementById('blast-result');
+  result.style.display = 'block';
+  result.innerHTML = `<div class="alert alert-success"><span class="alert-ico">✅</span><div><div class="alert-title">Disparo simulado!</div><div class="alert-sub">Mensagem enviada para ${count} grupo(s). Para disparo real, configure a Evolution API.</div></div></div>`;
+  toast('✅ Disparo simulado com sucesso!');
+}
+
+// ===================== SCHEDULES =====================
+function saveSched() {
+  const title = document.getElementById('sc-title').value.trim();
+  const platform = document.getElementById('sc-plat').value;
+  const datetime = document.getElementById('sc-datetime').value;
+  const content = document.getElementById('sc-content').value.trim();
+  if (!title || !datetime) { toast('⚠️ Preencha o título e a data/hora!'); return; }
+
+  state.schedules.push({ title, platform, datetime, content, status: 'scheduled' });
+  state.schedules.sort((a,b) => new Date(a.datetime) - new Date(b.datetime));
+  save();
+  renderSchedules();
+  renderDashboard();
+  closeModal('addSchedModal');
+  document.getElementById('sc-title').value = '';
+  document.getElementById('sc-content').value = '';
+  toast('✅ Post agendado!');
+}
+
+function deleteSched(i) {
+  state.schedules.splice(i, 1);
+  save();
+  renderSchedules();
+  renderDashboard();
+}
+
+// ===================== SETTINGS =====================
+function saveKey(type) {
+  const keys = { claude: 'cfg-claude-key', meta: 'cfg-meta-key', tg: 'cfg-tg-key', ev: 'cfg-ev-url' };
+  const val = document.getElementById(keys[type]).value.trim();
+  if (type === 'claude') {
+    state.apiKey = val;
+    localStorage.setItem('pj_apikey', val);
+  }
+  toast('✅ Chave salva!');
+}
+
+function savePrefs() {
+  toast('✅ Preferências salvas!');
+}
+
+// ===================== UTILS =====================
+function formatTime(dt) {
+  if (!dt) return '--:--';
+  return new Date(dt).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+}
+function formatDate(dt) {
+  if (!dt) return '';
+  return new Date(dt).toLocaleDateString('pt-BR');
+}
+
+// ===================== INIT =====================
+document.addEventListener('DOMContentLoaded', () => {
+  renderDashboard();
+  renderHistory();
+
+  // Set datetime default
+  const now = new Date();
+  now.setHours(now.getHours()+1, 0, 0, 0);
+  const dtInput = document.getElementById('sc-datetime');
+  if (dtInput) dtInput.value = now.toISOString().slice(0,16);
+
+  // Load saved API key
+  if (state.apiKey) {
+    const keyInput = document.getElementById('cfg-claude-key');
+    if (keyInput) keyInput.value = state.apiKey;
+  }
+});
+</script>
+</body>
+</html>
