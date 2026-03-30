@@ -1,8 +1,11 @@
 [phases.setup]
-nixPkgs = ["nodejs_20", "chromium", "nss", "freetype", "freetype-dev", "harfbuzz", "ca-certificates", "ttf-dejavu"]
+nixPkgs = ["nodejs_20", "chromium", "nss", "freetype", "harfbuzz"]
 
 [phases.build]
-cmds = ["cd frontend && npm install && npm run build", "cd backend && npm install"]
+cmds = [
+  "cd frontend && npm install && npm run build",
+  "cd backend && npm install"
+]
 
 [start]
 cmd = "cd backend && npm start"
