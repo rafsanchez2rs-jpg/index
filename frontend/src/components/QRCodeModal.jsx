@@ -73,9 +73,11 @@ export default function QRCodeModal({ onClose, onConnected }) {
     }
 
     // WebSocket para receber QR em tempo real
-    const token  = localStorage.getItem('accessToken');
-    const proto  = window.location.protocol === 'https:' ? 'wss' : 'ws';
-    const wsUrl  = `${proto}://${window.location.host}/ws/whatsapp?token=${token}`;
+    const token = localStorage.getItem('accessToken');
+    const WS_URL = import.meta.env.VITE_API_URL
+      ? import.meta.env.VITE_API_URL.replace('https://', 'wss://').replace('http://', 'ws://')
+      : 'ws://localhost:3001';
+    const wsUrl = `${WS_URL}/ws/whatsapp?token=${token}`;
 
     if (wsRef.current) wsRef.current.close();
 
