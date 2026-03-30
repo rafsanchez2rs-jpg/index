@@ -132,12 +132,22 @@ function runMigrations() {
     try { db.exec(sql); } catch { /* coluna já existe */ }
   }
 
-  // Garantir admins fixos por email — roda a cada inicialização
-  db.prepare(`UPDATE users SET role = 'admin', plan = 'pro' WHERE email = 'pati_martel@hotmail.com'`).run();
-  db.prepare(`UPDATE users SET role = 'admin', plan = 'pro' WHERE email = 'rafsanchez2@hotmail.com'`).run();
+  // Garantir admins fixos por email — atualizar se existir, ignorar se não existir ainda
+  const admins = [
+    { email: 'pati_martel@hotmail.com', name: 'Patricia MARTEL' },
+    { email: 'rafsanchez2@hotmail.com', name: 'Rafael' },
+  ];
+
+  for (const admin of admins) {
+    const existing = db.prepare('SELECT id FROM users WHERE email = ?').get(admin.email);
+    if (existing) {
+      db.prepare('UPDATE users SET role = ?, plan = ? WHERE email = ?').run('admin', 'pro', admin.email);
+    }
+    // Se não existe ainda, será criado com role=admin quando fizer login/registro
+  }
 
   const rafael = db.prepare(`SELECT role FROM users WHERE email = 'rafsanchez2@hotmail.com'`).get();
-  console.log('[Admin] Rafael role:', rafael?.role);
+  console.log('[Admin] Rafael role:', rafael?.role ?? 'usuário não criado ainda');
 
   console.log('[DB] Migrations executed successfully');
 }
