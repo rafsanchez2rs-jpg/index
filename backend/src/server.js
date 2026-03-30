@@ -160,24 +160,21 @@ runMigrations();
 scheduler.init();
 
 server.listen(PORT, '0.0.0.0', () => {
-  console.log(`\n🚀 ZapOfertas Backend rodando na porta ${PORT}`);
-  console.log(`   API: http://localhost:${PORT}/api`);
-  console.log(`   WS:  ws://localhost:${PORT}/ws/whatsapp`);
-  console.log(`   Env: ${process.env.NODE_ENV || 'development'}\n`);
+  console.log(`ZapOfertas Backend rodando na porta ${PORT}`);
+  console.log(`API: http://localhost:${PORT}/api`);
+  console.log(`Env: ${process.env.NODE_ENV}`);
 
-  // Inicializa WhatsApp após servidor subir (restaura sessão salva se existir)
+  // Inicializar WhatsApp após servidor subir
   try {
-    waManager.initialize().catch((err) => {
-      console.error('[Server] WhatsApp init error:', err.message);
-    });
+    waManager.initialize();
   } catch (err) {
-    console.error('[WA] Erro:', err.message);
+    console.error('[WA] Erro ao inicializar:', err.message);
   }
 
   // Health check: garante que WA reconecta se cair silenciosamente
   setInterval(() => {
     const { status, rateLimitedUntil } = waManager.getStatus();
-    if (rateLimitedUntil) return; // em cooldown de rate limit — não forçar reconexão
+    if (rateLimitedUntil) return;
     if (status !== 'ready' && status !== 'connecting' && status !== 'qr') {
       console.log('[Server] Health check: WA não conectado, tentando reconectar...');
       waManager.initialize().catch(() => {});
