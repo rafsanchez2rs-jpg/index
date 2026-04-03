@@ -34,19 +34,21 @@ ENV NODE_ENV=production
 
 WORKDIR /app
 
-# CACHE BUSTER: 2
-COPY backend/package.json ./backend/package.json
-RUN cd backend && npm install
-
-COPY backend/ ./backend/
-
-COPY frontend/package.json ./frontend/package.json
+# Frontend - instalar TUDO (precisa do vite para build)
+COPY frontend/package*.json ./frontend/
 RUN cd frontend && npm install
 
 COPY frontend/ ./frontend/
-RUN echo "VITE_API_URL=https://zapofertas-production.up.railway.app" > ./frontend/.env.production
+RUN echo "VITE_API_URL=https://zapofertas.onrender.com" \
+    > ./frontend/.env.production
 RUN cd frontend && npm run build
 
-EXPOSE 8080
+# Backend - apenas dependências de produção
+COPY backend/package*.json ./backend/
+RUN cd backend && npm install --production
+
+COPY backend/ ./backend/
+
+EXPOSE 10000
 
 CMD ["node", "backend/src/server.js"]
